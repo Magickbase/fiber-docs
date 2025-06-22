@@ -1,0 +1,177 @@
+---
+title: Architecture
+description: "Explore P | Magickbase: Design and Architecture"
+og:
+  title: Architecture
+  description: "**P** is built around 6 core components -- **Data Indexing**, **Data Services**, **Local AI Agent**, **Agent Delegation**, and **Heuristic Entry**. By standardizing and integrating raw data from multiple blockchains, **Data Indexing** ensures consistent asset and information management across ecosystems. **Data Services** leverage [tRPC](https://trpc.io/)  to deliver a lightweight, high-performance, and developer-friendly interface. On the client side, the **Local AI Agent** -- employing [LangChain](https://www.langchain.com/)  and [Llama](https://www.llama.com/)  models -- safeguards user privacy by running intent inference, routing, and memory management directly on users' devices. For tasks beyond local capabilities, **Agent Delegation** seamlessly offloads work to [Cloudflare Workers](https://workers.cloudflare.com/)  or [AWS Lambda](https://www.llama.com/) , achieving optimal efficiency and scalability. Additionally, **Heuristic Entry**, aided by Rasa and other NLP tools, guides less experienced users through complex operations with clear, context-aware suggestions."
+  image: /images/architecture/og_image.jpg
+  type: article
+---
+
+# Introduction
+
+## Refining Blockchain Accessibility: The Vision and Goals of P
+
+Blockchain technology holds incredible potential but is often too complex for most people. The fragmented nature of blockchain ecosystems also makes adopting and integrating into daily life difficult.
+
+We can easily find the following complexity
+
+* It's hard to organize UTXO, as transactions rely on detailed algorithms to process payments. For example, a UTXO (Unspent Transaction Output) is a system where each transaction chooses which "coins" to spend, like picking bills from your wallet. Different strategies exist for doing this—some are simple, while others aim to save fees or reduce leftover "change."
+* It's hard to manage funds. Unlike a simple bank account, a blockchain address can hold multiple small pieces of value (UTXOs). Keeping track of all these pieces requires more effort than a straightforward balance.
+* It's hard to manage pending objects. Transactions on UTXO blockchains depend on unspent outputs from previous ones. This means if one transaction isn't confirmed, others waiting for it can't proceed.
+
+Besides, the ecosystem has been fragmented due to different designs and siloed systems as blockchains are often designed with specific goals or interests in mind, so they don't naturally work together. However, users typically want to interact across these systems, such as storing values with Bitconi, participating in communities with Dogecoin, or using advanced apps on Nervos CKB.
+
+**P | Magickbase(P in short)** aims to lower the barriers to blockchain app development as much as possible through multi-layer abstraction and modular design. This enables non-developers to utilize blockchain apps at minimal cost and effort.
+
+Right now, we are helping product managers build financial apps on blockchains without requiring them to know how everything works under the hood.
+
+Building MEV Tools, for instance, requires many technical steps, like studying how transactions are ordered, using simulators to find opportunities, and creating automated systems. With **P**, all these steps are reduced to **3** simple actions:
+
+1. Picking a trigger;
+2. Choosing an action;
+3. Deploying it
+
+## By this guide
+
+We aim to explain the design of **P**, how it functions, and how it makes blockchains more straightforward and accessible.
+
+# Architecture
+
+**P** has 6 main components: **Data Indexing**, **Data Services**, **Local AI Agent**, **Agent Delegation**, **Marketplace**, and **Heuristic Entry**. Here's how they work together.
+
+## Data Indexing
+
+Data Indexing is like the foundation of a house -- it organizes and simplifies all the raw blockchain data so it's easy to use. Since **P** works with multiple blockchains, it pulls together details from each one and makes them consistent.
+
+It's built on **Meta Asset** Middleware and **Gateway Interface** Layers.
+
+<figure style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+  <img src="/images/architecture/meta-asset-gateway-interface.png" alt="Meta Asset Gateway Interface" />
+  <figcaption style={{ textAlign: 'center', fontStyle: 'italic', color: '#888', fontWeight: '300' }}>Meta Asset Gateway Interface</figcaption>
+</figure>
+
+The **Meta Asset** handles assets all over blockchains and lets users manage assets (like transferring or swapping cryptocurrency) without worrying about the differences between blockchains. While **Gateway Interfaces** connect to blockchains, keep track of what's happening in real-time, and "translate" between blockchains, so they all speak the same language and can be understood by the rest of the system.
+
+## Data Services
+
+Data Services act as the front door for clients. They take client requests, process them, and return the right results. They also make sure clients have the proper permissions to access certain properties.
+
+<figure style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+  <img src="/images/architecture/data-services.png" alt="Data Services" />
+  <figcaption style={{ textAlign: 'center', fontStyle: 'italic', color: '#888', fontWeight: '300' }}>Data Services</figcaption>
+</figure>
+
+**P** uses a modern, lightweight system called [tRPC](https://trpc.io/) to handle user requests. This system is simple, fast, and works perfectly with tools that many developers already use.
+
+[tRPC](https://trpc.io/) is built on the HTTP protocol and uses lightweight JSON data for transmission, simplifying the middleware by reducing complexity.
+
+Compared to GraphQL, it eliminates the overhead of parsing complex queries. While compared to RESTful RPC, it avoids redundant data transfer.
+
+[tRPC](https://trpc.io/) is also developer-friendly, specifically tailored for TypeScript developers, and supports SDK generation for seamless integration.
+
+<figure style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+  <img src="/images/architecture/comparison-of-rpcs.png" alt="Comparison between tRPC, gRPC, RESTful, and GraphQL" />
+  <figcaption style={{ textAlign: 'center', fontStyle: 'italic', color: '#888', fontWeight: '300' }}>Comparison between tRPC, gRPC, RESTful, and GraphQL</figcaption>
+</figure>
+
+## Local AI Agent
+
+The Local AI Agent is like a smart assistant that runs on your device. It understands what you want to do, finds the best way to do it, and ensures your privacy by keeping everything local.
+
+It consists of 3 key parts:
+
+1. **Intent Inference**: Understanding what the user wants.
+2. **Routing**: Picks the right tools to achieve the goal.
+3. **Memory Management**: Remembers part interactions to provide a better experience.
+
+For this, we use [LangChain](https://www.langchain.com/) to build AI Agents, and adopt [Llama](https://www.llama.com/) model to interpret user input and respond intelligently.
+
+[LangChain](https://www.langchain.com/) is an open-source framework that offers a robust set of tools and modules, along with a rapidly evolving ecosystem.
+
+[Llama](https://www.llama.com/)  is optimized for local deployment, providing greater control over data and privacy. Additionally, its lower hardware requirements make it ideal for creating AI Agents that operate directly on user devices.
+
+<figure style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+  <img src="/images/architecture/comparison-of-ais.png" alt="Comparison between Llama and OpenAI" />
+  <figcaption style={{ textAlign: 'center', fontStyle: 'italic', color: '#888', fontWeight: '300' }}>Comparison between Llama and OpenAI</figcaption>
+</figure>
+
+## Agent Delegation
+
+Sometimes, tasks need to be executed in the cloud, such as scheduling a process or performing complex conditional workflows. That's where **Agent Delegation** plays a crucial role.
+
+Agents are assigned to one of two types of runners based on the task requirements:
+
+1. **Quick Tasks**: For lightweight and fast operations, Agents are delegated to [Cloudflare Workers](https://workers.cloudflare.com/) , which are optimized for low-latency execution.
+2. **Complex Operations**: For resource-intensive tasks, e.g. Llama 8B model, Agents are delegated to [AWS Lambda](https://aws.amazon.com/lambda/) , which provides the necessary scalability and computational power.
+
+<figure style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+  <img src="/images/architecture/runners-for-agent-delegation.png" alt="Runners for Agent Delegation" />
+  <figcaption style={{ textAlign: 'center', fontStyle: 'italic', color: '#888', fontWeight: '300' }}>Runners for Agent Delegation</figcaption>
+</figure>
+
+## Marketplace
+
+Sharing and incentives are the driving forces behind community growth. Since we've created such outstanding Agents and Workflows, we can consider sharing or selling them to generate returns.
+
+A marketplace will be provided on **P**, where creativity and positive returns will be encouraged.
+
+The marketplace comprises **Registry Service**, **Discovery Service**, and **Analytics Service**.
+
+**Registry Service** handles the full lifecycle of Agent/Workflow distribution, from publishing to updates. Developers can define metadata, manage versions, and set access controls for sharing. Monetization options include fee, one-time, or subscription models, with both fiat and crypto payments supported.
+
+**Search and Discovery Service** provides an efficient way for Agent/workflow exposure. Users can search and filter by keywords, rating, or pricing, while personalized recommendations will be connected to [heuristic entry](https://docs.magickbase.com/docs/architecture#heuristic-entry)  which is mentioned below.
+
+[Algolia](https://www.algolia.com/)  plays a pivotal role in this domain, and we will leverage its capabilities to enhance the efficiency and effectiveness of our Search and Discovery Service
+
+<figure style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+  <img src="/images/architecture/powered-by-algolia.webp" alt="Powered by Algolia" />
+  <figcaption style={{ textAlign: 'center', fontStyle: 'italic', color: '#888', fontWeight: '300' }}>Powered by Algolia</figcaption>
+</figure>
+
+**Analytics Service** offers actionable insights for developers. Metrics on usage, performance, and trends provide a clear view of adoption and resource efficiency. Financial reporting tracks revenue and subscriptions.
+
+**Feedback and Update Service** entitles users to rate, and review, as feedback to the developer and the community. Additionally, update logs and automatic notifications will be supported to help users stay informed about the latest changes and updates.
+
+## Heuristic Entry
+
+For non-professional users, it's crucial to identify their true needs while avoiding unnecessary details that might cause distraction or loss of focus. **P** introduces a feature called **Heuristic Entry,** which leverages heuristic algorithms to analyze user input in real-time and deliver precise, context-aware recommendations.
+
+We rely on [Rasa](https://rasa.com/), a powerful language processing tool, to understand user input and provide meaningful suggestions.
+
+As each component has been elaborated, we can put them together and have an overhead view for a more comprehensive understanding of the system.
+
+<figure style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+  <img src="/images/architecture/overhead-view.png" alt="Overhead View of P | Magickbase" />
+  <figcaption style={{ textAlign: 'center', fontStyle: 'italic', color: '#888', fontWeight: '300' }}>Overhead View of P | Magickbase</figcaption>
+</figure>
+
+# Looking Ahead
+
+In the future, we aim to develop **P** into a community that encourages users to **share** and **sell** workflows they polished, namely that we will have a DAO for the platform. To support this vision, we will introduce an **account system**. for both Web2 users and Web3 users.
+
+Users will be able to log in to **P** using an **account** or a **wallet**, earning points and tokens with different weights. These will enable participation in community decision-making and establish a feedback mechanism.
+
+Additionally, we will incentivize users who contribute to the community by offering them rewards such as discounts and priority access to community resources.
+
+# Recap
+
+**P** is built around 6 core components -- **Data Indexing**, **Data Services**, **Local AI Agent**, **Agent Delegation**, and **Heuristic Entry**.
+
+By standardizing and integrating raw data from multiple blockchains, **Data Indexing** ensures consistent asset and information management across ecosystems.
+
+**Data Services** leverage [tRPC](https://trpc.io/)  to deliver a lightweight, high-performance, and developer-friendly interface.
+
+On the client side, the **Local AI Agent** -- employing [LangChain](https://www.langchain.com/)  and [Llama](https://www.llama.com/)  models -- safeguards user privacy by running intent inference, routing, and memory management directly on users' devices.
+
+For tasks beyond local capabilities, **Agent Delegation** seamlessly offloads work to [Cloudflare Workers](https://workers.cloudflare.com/)  or [AWS Lambda](https://www.llama.com/) , achieving optimal efficiency and scalability.
+
+Additionally, **Heuristic Entry**, aided by Rasa and other NLP tools, guides less experienced users through complex operations with clear, context-aware suggestions.
+
+# Acknowledgments
+
+Sincere gratitude to every member of the Magickbase team for your unwavering dedication to **P**.
+
+And to all the open-source projects that have formed P's backbone.
+
+Together, your efforts have laid a strong foundation, enabling a unified, privacy-focused blockchain ecosystem.

@@ -1,0 +1,40 @@
+---
+title: Platform Routes
+description: "Direction guideline for Platform | Magickbase"
+og:
+  title: Platform Routes | Magickbase
+  description: "The Routes Page provides a clear and structured overview of all the accessible pages and endpoints within the Platform."
+  image: /images/platform-routes/og_image.jpg
+  type: article
+---
+
+### Domain
+
+* Preflight: [https://preflight.magickbase.com](https://preflight.magickbase.com)
+  * Preflight is for exploring and experiencing Beta features
+
+### Locale
+
+* English: `en`
+
+### Chain
+
+* Bitcoin: `btc`
+* CKB: `ckb`
+
+### Asset ID
+
+* xUDT: asset id for an xUDT is its `type script hash`
+
+### Routes
+
+The following routes are based on the`{domain}/{locale}/`
+
+| Page        | Route                             | Example                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| :---------- | :-------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Home Page   | `/home`                           | [https://preflight.magickbase.com/en/home](https://preflight.magickbase.com/en/home)                                                                                                                                                                                                                                                                                                                                                                                 |
+| Address     | `/address/{address}`              | [https://preflight.magickbase.com/en/address/ckt1qpl45zdch58gt08jejkevsguew309zt53gwpdyqtqc6u9mv3ymegsqtsydv75lc8x4vfy844pkxpcalf9amqerux2677fx2ly6ufv03dmrey2uzaknl890548e8eacuq3gtspftcxsd2sz5tydyuydky4ajw2e4jygqqqqqqqqq96p0p](https://preflight.magickbase.com/en/address/ckt1qpl45zdch58gt08jejkevsguew309zt53gwpdyqtqc6u9mv3ymegsqtsydv75lc8x4vfy844pkxpcalf9amqerux2677fx2ly6ufv03dmrey2uzaknl890548e8eacuq3gtspftcxsd2sz5tydyuydky4ajw2e4jygqqqqqqqqq96p0p) |
+| Assets      | `/asset`                          | [https://preflight.magickbase.com/en/asset](https://preflight.magickbase.com/en/asset)                                                                                                                                                                                                                                                                                                                                                                               |
+| Asset       | `/asset/{asset id}`               | [https://preflight.magickbase.com/en/asset/0x757b1cf54ebc57f2b94fb2bc273166ba6f68b68001acad5cc557cb4935d1213b](https://preflight.magickbase.com/en/asset/0x757b1cf54ebc57f2b94fb2bc273166ba6f68b68001acad5cc557cb4935d1213b)                                                                                                                                                                                                                                         |
+| Transaction | `/transaction/{hash}`             | [https://preflight.magickbase.com/en/transaction/0x109cbe819c858ae2e0e34d1b4835542d50292b275ecbbd0e6a2aa9612f9ac836](https://preflight.magickbase.com/en/transaction/0x109cbe819c858ae2e0e34d1b4835542d50292b275ecbbd0e6a2aa9612f9ac836)                                                                                                                                                                                                                             |
+| Block       | `/block/{chain}/{hash or number}` | [https://preflight.magickbase.com/en/block/ckb/8812454](https://preflight.magickbase.com/en/block/ckb/8812454)                                                                                                                                                                                                                                                                                                                                                       |
