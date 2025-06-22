@@ -9,6 +9,20 @@ const config = {
   images: {
     unoptimized: true,
   },
+  async redirects() {
+    return [
+      {
+        source: '/docs',
+        destination: '/docs/welcome-to-magickbase-platform',
+        permanent: true,
+      },
+      {
+        source: '/',
+        destination: '/docs/welcome-to-magickbase-platform',
+        permanent: false,
+      },
+    ];
+  },
 };
 
 export default withMDX(config);

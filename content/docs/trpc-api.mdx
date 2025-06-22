@@ -1,0 +1,69 @@
+---
+title: TRPC API Documentation
+description: "P | Magickbase is a data service platform that simplifies API integration for developers. We recommend using tRPC as the communication protocol to provide a modern, type-safe, and efficient API solution."
+---
+
+**P | Magickbase** is a data service platform that simplifies API integration for developers. We recommend using [tRPC](https://trpc.io/)  as the communication protocol to provide a modern, type-safe, and efficient API solution.
+
+## Why Choose tRPC?
+
+[tRPC](https://trpc.io/)  is a lightweight, dependency-free RPC framework for TypeScript environments, offering the following benefits:
+
+1. Type Safety: Shared types between client and server ensure no runtime mismatches.
+2. Zero Code Generation: Eliminates the need for additional code or type generation, reducing complexity.
+3. Ease of Use: Simplifies API requests by handling HTTP definitions and parsing internally.
+4. High Performance: Lightweight and optimized for efficient data transfer.
+5. Flexibility: Supports middleware and plugin extensions for complex use cases.
+
+We have a brief comparison of API protocols and you can find more [here](https://docs.magickbase.com/docs/architecture#/data-services) .
+
+## How to Use tRPC API
+
+Follow these steps to integrate tRPC into your project:
+
+### Introduce Dependencies
+
+The package has not been published to \[npm] yet, so it should be introduced from GitHub.
+
+```
+# Package.json
+{
+  "dependencies": {
+    "@magickbase/p": "github:magickbase/platform-api"
+  }
+}
+```
+
+### Access API Type Files
+
+All API definitions and type files are available in GitHub [Platform API](https://github.com/Magickbase/platform-api/tree/develop)
+
+Key Type Files
+
+* [trpc.d.cts](https://github.com/Magickbase/platform-api/blob/develop/trpc.d.cts)
+
+### Quick Setup in Client
+
+```typescript
+import { TRPCRouter } from '@magickbase/p';
+import { createTRPCClient, httpBatchLink } from '@trpc/client';
+import SuperJSON from 'superjson';
+
+const client = createTRPCClient<TRPCRouter>({
+  links: [
+    httpBatchLink({
+      url: `https://api-endpoint.domain/api/trpc`,
+      transformer: SuperJSON,
+      headers: {
+        Authorization: `Bearer <my-token>`,
+      },
+    }),
+  ],
+});
+```
+
+<br />
+
+Now you can fully enjoy the benefits brought by [tRPC](https://trpc.io/) .
+
+![](https://github.com/Magickbase/platform-api/raw/develop/assets/p-client.gif)
