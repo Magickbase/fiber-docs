@@ -1,0 +1,44 @@
+name: Update OpenAPI
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  update-openapi:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+
+      - name: Install dependencies
+        run: |
+          npm i
+
+      - name: Run update script
+        run: |
+          npm run api:gen
+
+      - name: Configure Git
+        run: |
+          git config --local user.name "GitHub Actions"
+          git config --local user.email "action@github.com"
+
+      - name: Commit and push if changes
+        run: |
+          git add content/docs/open-api
+          if git diff --staged --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "docs: update OpenAPI documentation[skip ci]"
+            git push
+          fi
+
+

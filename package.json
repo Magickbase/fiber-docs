@@ -6,7 +6,8 @@
     "build": "next build",
     "dev": "next dev --turbo",
     "start": "next start",
-    "postinstall": "fumadocs-mdx"
+    "postinstall": "fumadocs-mdx",
+    "api:gen": "node ./scripts/generate-openapi.mjs"
   },
   "dependencies": {
     "ajv": "^8.17.1",
