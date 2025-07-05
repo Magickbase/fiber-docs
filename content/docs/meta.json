@@ -1,8 +1,6 @@
 {
   "defaultOpen": true,
   "pages": [
-    "(guide)",
-    "trpc-api",
     "open-api"
   ]
 }

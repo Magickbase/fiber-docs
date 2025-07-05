@@ -7,7 +7,14 @@ import type { MDXComponents } from 'mdx/types';
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
   return {
     ...defaultMdxComponents,
-    APIPage: (props) => <APIPage { ...openapi.getAPIPageProps(props) } />,
+    APIPage: (props) => {
+      // Handle the case where props.document is a string path
+      if (typeof props.document === 'string' && props.document.startsWith('public/')) {
+        const documentUrl = `/${props.document}`;
+        return <APIPage {...props} document={documentUrl} />;
+      }
+      return <APIPage {...openapi.getAPIPageProps(props)} />;
+    },
     ...components,
   };
 }

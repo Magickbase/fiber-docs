@@ -12,7 +12,7 @@ export const baseOptions: BaseLayoutProps = {
     title: (
       <>
         <img src="/favico.svg" alt="Logo" width="24" height="24" />
-        P | Magickbase
+        Fiber | Magickbase
       </>
     ),
   },

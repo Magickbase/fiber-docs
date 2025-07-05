@@ -12,13 +12,8 @@ const config = {
   async redirects() {
     return [
       {
-        source: '/docs',
-        destination: '/docs/welcome-to-magickbase-platform',
-        permanent: true,
-      },
-      {
         source: '/',
-        destination: '/docs/welcome-to-magickbase-platform',
+        destination: '/docs',
         permanent: false,
       },
     ];
